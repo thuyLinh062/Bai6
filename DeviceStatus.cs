@@ -9,6 +9,7 @@ namespace QuanLyThietBi
     {
         Active,
         UnderMaintenance,
-        Retired
+        Retired,
+        available
     }
 }

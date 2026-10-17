@@ -27,7 +27,13 @@ namespace QuanLyThietBi
         //Số tiết được mượn tối đa
         public int MaxBorrow {get; }
         
-        protected Device(string deviceId, string deviceName, int startYears, decimal costPrice, DeviceStatus status, int MaxBorrow)
+        protected Device(
+            string deviceId, 
+            string deviceName, 
+            int startYears, 
+            decimal costPrice,
+            DeviceStatus status, 
+            int MaxBorrow)
         {
             if(string.IsNullOrWhiteSpace(deviceId))
             {

@@ -12,6 +12,16 @@ namespace QuanLyThietBi
 
         public TeachingAssistant(string borrowerId, string fullName)
         {
+            if(string.IsNullOrWhiteSpace(BorrowerId))
+            {
+                throw new ArgumentException("ID không được để trống");
+            }
+
+             if(string.IsNullOrWhiteSpace(fullName))
+            {
+                throw new ArgumentException("Tên không được để trống");
+            }
+            
             BorrowerId = borrowerId;
             FullName = fullName;
         }
