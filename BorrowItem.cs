@@ -60,8 +60,7 @@ namespace QuanLyThietBi
             // Không cho phép trả hai lần
             if (IsReturned)
             {
-                throw new InvalidOperationException(
-                    $"Thiết bị {Device.DeviceId} đã được trả trước đó.");
+                throw new DeviceAlreadyReturnedException(Device.DeviceId);
             }
 
             //Ngày trả không được trước ngày mượn

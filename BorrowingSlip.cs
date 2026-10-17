@@ -69,42 +69,53 @@ namespace QuanLyThietBi
                 throw new ArgumentException(nameof(borrowDays), "Số ngày mượn phải lớn hơn 0.");
             }
 
-            DateTime dueDate = BorrowedDate.AddDays(borrowDays);
-
-            bool isExisted = Items.Any(item => item.Device.DeviceId == device.DeviceId);
-
             // Kiểm tra xem thiết bị có tồn tại trong phiếu không.
-            if (!isExisted)
+            bool isExisted = Items.Any(item => item.Device.DeviceId == device.DeviceId);
+            if (isExisted)
             {
-                throw new ArgumentException("Thiết bị chưa tồn tại trong phiếu!");
+                throw new DuplicateDeviceException(device.DeviceId);
             }
 
             //Kiểm tra xem người mượn đã đạt đến giới hạn chưa 
-            if(device.Quantity );
+            if(Items.Count > Borrower.GetMaximumDevices())
+            {
+                throw new BorrowLimitExceededException(Borrower.BorrowerId, Borrower.GetMaximumDevices());
+            }
 
-            BorrowItem newItem = new BorrowItem(device, BorrowedDate, dueDate, fromPeriod, toPeriod);
+            //Kiểm tra xem thiết bị có sẵn không 
+            bool isAvailable = device.Status == DeviceStatus.Available;
+            if(!isAvailable)
+            {
+                throw new DeviceUnavailableException(device.DeviceId, device.Status);
+            }
+
+            DateTime dueDate = BorrowedDate.AddDays(borrowDays);
+            BorrowItem newItem = new BorrowItem(device, BorrowedDate, dueDate,  fromPeriod, toPeriod);
 
             Items.Add(newItem);
+            device.Status = DeviceStatus.Borrowed; //Chuyển đổi status của device thành borrowed
+
             Console.WriteLine($"Thêm thiết bị {device.DeviceName} ({device.DeviceId}) vào phiếu mượn thành công.");
         }
 
-        public decimal ReturnDevice(string deviceId, DateTime returnedDate)
+        public void ReturnDevice(string deviceId, DateTime returnedDate)
         {
             if(string.IsNullOrWhiteSpace(deviceId))
             {
                 throw new ArgumentException(nameof(deviceId), "Id thiết bị không được để trống.");
             }
 
-            bool isExisted = Items.Any(item => item.Device.DeviceId == deviceId);
+            BorrowItem? item = items.FirstOrDefault(
+                i => string.Equals(
+                    i.Device.DeviceId,
+                    deviceId,
+                    StringComparison.OrdinalIgnoreCase));
 
-            if (!isExisted)
-            {
-                throw new ArgumentException("Không tồn tại deviceID này!");
-            }
+            if (item == null)
+                throw new DeviceNotInSlipException(deviceId);
 
-            TimeSpan returnDevice = returnedDate - BorrowedDate;
-            decimal soNgay = (decimal)returnDevice.TotalDays;
-            return soNgay;
+            item.Return(returnedDate);
+            item.Device.Status = DeviceStatus.Available;
         }
 
         public decimal CalculateTotalLateFee()
