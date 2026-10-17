@@ -6,7 +6,7 @@ namespace QuanLyThietBi
 {
     public class ProjectorRemote : Device
     {
-        protected ProjectorRemote(
+        public ProjectorRemote(
             string deviceId, 
             string deviceName, 
             int startYears, 

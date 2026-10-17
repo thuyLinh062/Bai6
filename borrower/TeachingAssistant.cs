@@ -4,30 +4,31 @@ using System;
 
 namespace QuanLyThietBi
 {
-    public class Lecturer : IBorrower
+    public class TeachingAssistant : IBorrower
     {
         public string BorrowerId { get; set; } = string.Empty;
 
         public string FullName { get; set; } = string.Empty;
 
-        public Lecturer(string borrowerId, string fullName)
+        public TeachingAssistant(string borrowerId, string fullName)
         {
-            if(string.IsNullOrWhiteSpace(BorrowerId))
+            if(string.IsNullOrWhiteSpace(borrowerId))
             {
-                throw new ArgumentException("ID không được để trống");
+                throw new ArgumentException(nameof(borrowerId), "ID không được để trống");
             }
 
              if(string.IsNullOrWhiteSpace(fullName))
             {
                 throw new ArgumentException("Tên không được để trống");
             }
+            
             BorrowerId = borrowerId;
             FullName = fullName;
         }
 
         public int GetMaximumDevices()
         {
-            return 3;
+            return 2;
         }
     }
 }

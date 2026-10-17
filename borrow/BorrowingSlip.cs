@@ -29,14 +29,6 @@ namespace QuanLyThietBi
                     "Mã phiếu không được để trống.");
             }
 
-            //Người mượn chưa đạt giới hạn thiết bị
-            if (items.Count >= Borrower.GetMaximumDevices())
-            {
-                throw new BorrowLimitExceededException(
-                    Borrower.BorrowerId,
-                    Borrower.GetMaximumDevices());
-            }
-
             if (borrower == null)
             {
                 throw new ArgumentNullException(
@@ -54,6 +46,14 @@ namespace QuanLyThietBi
             TeachingRoom = teachingRoom;
             BorrowedDate = borrowedDate.Date;
             Items = new List<BorrowItem>();
+
+            //Người mượn chưa đạt giới hạn thiết bị
+            if (items.Count >= borrower.GetMaximumDevices())
+            {
+                throw new BorrowLimitExceededException(
+                    borrower.BorrowerId,
+                    borrower.GetMaximumDevices());
+            }
         }
 
         //Nếu không nhập số tiết thì gán tự động số tiết từ 1-10
@@ -77,7 +77,7 @@ namespace QuanLyThietBi
             }
 
             //Kiểm tra xem người mượn đã đạt đến giới hạn chưa 
-            if(Items.Count > Borrower.GetMaximumDevices())
+            if(Items.Count >= Borrower.GetMaximumDevices())
             {
                 throw new BorrowLimitExceededException(Borrower.BorrowerId, Borrower.GetMaximumDevices());
             }

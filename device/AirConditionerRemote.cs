@@ -6,7 +6,7 @@ namespace QuanLyThietBi
 {
     public class AirConditionerRemote : Device
     {
-        protected AirConditionerRemote(
+        public AirConditionerRemote(
             string deviceId, 
             string deviceName, 
             int startYears, 

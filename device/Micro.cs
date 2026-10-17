@@ -6,7 +6,7 @@ namespace QuanLyThietBi
 {
     public class Micro : Device
     {
-        protected Micro(
+        public Micro(
             string deviceId, 
             string deviceName, 
             int startYears, 
